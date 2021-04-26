@@ -7,7 +7,7 @@
 
 ### Max Heap의 특징
 > 저장된 원소 중 **key 값이 가장 큰 원소**를 제공하는 data structure
-- 원소의 insert, delete가 **O(log n)**에 이루어짐
+- 원소의 insert, delete가 O(log n)에 이루어짐
 - 일반적으로 **array**를 사용하여 표현
   * root의 위치를 1로 했을 때, k번째 원소의
     1) left child : 2k번째 원소
