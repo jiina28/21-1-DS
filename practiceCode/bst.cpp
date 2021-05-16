@@ -7,13 +7,28 @@ public:
     string name;
     string s_id;
     double score;
-    bst_node *left, *right;
+    bst_node* left, *right;
+    bst_node();
+    bst_node(string s1, string s2, double n);
     void set_data(string s1, string s2, double n);
 };
 
+bst_node::bst_node() {
+	s_id = "00000000";
+	name = "None";
+	score = 0.0;
+}
+
+bst_node::bst_node(string s1, string s2, double n)
+{
+	s_id = s1;
+	name = s2;
+	score = n;
+}
+
 void bst_node::set_data(string s1, string s2, double n) {
-    name = s1;
-    s_id = s2;
+    s_id = s1;
+    name = s2;
     score = n;
 }
 
@@ -66,49 +81,60 @@ void bst_tree::insert_node(bst_node t) {
         }
     }
 }
+void inorder(bst_node *p) {
+    if(p==NULL) return;
+
+    inorder(p->left);
+    cout << p->s_id << " : " << p->name << " : " << p->score << "\n";
+    inorder(p->right);
+
+}
 
 void bst_tree::show_inorder() {
-    bst_node *p;
-
-    
-
+    inorder(root);
 }
 
 bst_node bst_tree::search(string tid) {
-    bst_node *p;
-    p = root;
+    bst_node* p;
+	p = root;
+	if (root == NULL)
+	{
+		bst_node tmp;
+		tmp.set_data("0000000", "None", -1);
+		cout << "The key " << tid << " does not exist.\n";
+		return tmp;
+	}
+	while (1)
+	{
+		if (p->s_id == tid)
+			return (*p);
 
-    if(root==NULL) {
-        bst_node tmp;
-        tmp.set_data("00000000", "None", -1);
-        cout << "The key" << tid << " does not exist.\n";
-        return tmp;
-    }
-    while(1) {
-        if(p->s_id == tid)
-            return (*p);
-        if(p->s_id < tid) {
-            if(p->right == NULL) {
-                bst_node tmp;
-                tmp.set_data("00000000", "None", -1);
-                cout << "The key" << tid << " does not exist.\n";
-                return tmp;
-            }
-            else p = p->right;
-        }
-        if(p->s_id > tid) {
-            if(p->left == NULL) {
-                bst_node tmp;
-                tmp.set_data("00000000", "None", -1);
-                cout << "The key" << tid << " does not exist.\n";
-                return tmp;
-            }
-            else p = p->left;
-        }
-    }
+		if (p->s_id < tid) {
+			if (p->right == NULL)
+			{
+				bst_node tmp;
+				tmp.set_data("0000000", "None", -1);
+				cout << "The key " << tid << " does not exist.\n";
+				return tmp;
+			}
+			else
+				p = p->right;
+		}
+
+        else {
+			if (p->left == NULL)
+			{
+				bst_node tmp;
+				tmp.set_data("0000000", "None", -1);
+				cout << "The key " << tid << " does not exist.\n";
+				return tmp;
+			}
+			else
+				p = p->left;
+		}
+		
+	}
 }
-
-
 
 int main()
 {
@@ -128,7 +154,7 @@ int main()
     t1.insert_node(temp);
 
     cout << "\n\n Node List : inorder sequence \n";
-    //t1.show_inorder();
+    t1.show_inorder();
 
     string s_key = "21800442";
     temp = t1.search(s_key);
