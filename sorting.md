@@ -68,10 +68,85 @@ void bubble_sort(s_record a[], int n) {
   }
 }
 ```
-- 위의 세 알고리즘(Insertion sort, Selection sort, Bubble sort)은 **O(n^2)** 의 time complexity가 걸림 
+- 위의 세 알고리즘(Insertion sort, Selection sort, Bubble sort)은 **O(n^2)** 의 time complexity가 걸림
 ---
 #### Quick sort
+- 대상 범위의 원소 개수가 1 이하이면 return
+- 대상 범위의 첫 원소를 기준 원소(pivot)로 하여
+- pivot 보다 key 값이 큰 원소는 뒤로, 작은 원소는 앞으로 이동하여 list를 분리(partitioning)
+- 앞 부분과 뒷 부분을 다시 quick sort 실행
+```c
+void quick_sort(s_record a[], int left, int right) {
+  s_record pivot, temp;
+  int i, j;
+  if(left >= right) return;   // 원소 개수가 1 이하
+  i = left;                   // 앞에서 뒤로
+  j = right + 1;              // 뒤에서 앞으로
+  pivot = a[left];
+  do {
+    do {
+      i++;
+    } while((i <= right) && (a[i].s_id < pivot.s_id));      // 크면 멈춰라
+    do {
+      j--;
+    } while(a[j].s_id > pivot.s_id);                        // 작으면 멈춰라
+    if(i < j) swap(a[i], a[j]);
+  } while(i < j);                                           // 서로 교차할 때까지 반복
+  swap(a[left], a[j]);
+  quick_sort(a, left, j-1);
+  quick_sort(a, j+1, right);
+}
+```
 
 #### Merge sort
+- 전체를 길이가 s인 sorted list가 연속된 형태로 고려하여, 두 개의 list를 한 개로 merge하는 과정을 반복
+- s를 1로 시작하여 2배로 증가 시켜 반복
+- s가 전체 길이가 되면 종료
+```c
+void merge(s_record a[], s_record b[], int n1, int n2, int n3, int n4) {
+  int i, j, k, t;
+  i = n1;
+  j = n3;
+  k = n1;
+  while((i <= n2) && (j <= n4)) {
+    if(a[i].s_id <= a[j].s_id)
+      b[k++] = a[i++];          // i 선택
+    else
+      b[k++] = a[j++];          // j 선택
+  }
+  if(i > n2) {
+    for(t=j;t<=n4;t++)
+       b[t] = a[t];
+  }
+  else {
+    for(t = i;t<=n2;t++)
+      b[k+t-i] = a[t];
+  }
+}
+```
 
 #### Heap sort
+- 초기 heap 구성
+- 다음을 n-1회 반복
+  * heap에서 첫 원소와 끝 원소의 위치를 교환
+  * heap의 size를 1 감소시킴
+  * root를 기준으로 reheaping(adjust)
+```c
+void heap_sort(s_record a[], int n) {
+  int i;
+  s_record b[S_SIZE], temp;
+
+  for(i=0;i<n;i++)        // 1부터 n번째까지로 위치 조정
+    b[i+1] = a[i];
+
+  for(i=n/2;i>0;i--)      // 주어진 입력에 대하여 heap 구성
+    adjust(b, i, n);
+
+  for(i=n-1;i>0;i--) {
+    temp = b[1];
+    b[1] = b[i+1];
+    b[i+1] = temp;
+    adjust(b, 1, i);
+  }
+}
+```
